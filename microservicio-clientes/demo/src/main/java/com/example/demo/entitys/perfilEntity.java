@@ -3,19 +3,13 @@ package com.example.demo.entitys;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 @Data
 @Builder
-@Document(collection = "clients")
-public class ClientEntity {
+@Document(collection = "profiles")
+public class perfilEntity {
     @Id
     private String id;
-    private String name;
-    private String document;
-    @DBRef
-    private TipoClienteEntity type;
-
+    private String nombre;
 
 }

@@ -5,17 +5,16 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 @Data
 @Builder
-@Document(collection = "clients")
-public class ClientEntity {
+@Document(collection = "typeClients")
+public class TipoClienteEntity {
     @Id
     private String id;
-    private String name;
-    private String document;
+    private String nombre;
+
     @DBRef
-    private TipoClienteEntity type;
+    private perfilEntity perfil;
 
-
+    // Getters, setters, etc.
 }

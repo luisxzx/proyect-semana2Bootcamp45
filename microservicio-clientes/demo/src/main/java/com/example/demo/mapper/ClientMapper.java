@@ -1,72 +1,63 @@
 package com.example.demo.mapper;
 
 import com.example.demo.entitys.ClientEntity;
+import com.example.demo.entitys.TipoClienteEntity;
+import com.example.demo.entitys.perfilEntity;
 import com.example.demo.model.Client;
+import com.example.demo.model.Perfil;
+import com.example.demo.model.TipoCliente;
+
 public class ClientMapper {
-    /**
-     * Método para ClientMapper.
-     * @param clientDto parametro de Client.
-     * @return ClientEntity.
-     */
-    public static ClientEntity dtoToEntity(final Client clientDto) {
+
+
+    public static ClientEntity dtoToEntity(Client clientDto) {
         return ClientEntity.builder()
                 .id(clientDto.getId())
                 .name(clientDto.getName())
-                .dni(clientDto.getDni())
-                .type(dtoTypeToEntityType(clientDto.getType()))
+                .document(clientDto.getDocumento())
+                .type(dtoTypeToEntityType(clientDto.getTipoCliente()))
                 .build();
     }
 
-    /**
-     * Método para ClientMapper.
-     * @param typeEnum parametro de Client.TypeEnum.
-     * @return ClientEntity.ClientType.
-     */
-    private static ClientEntity.ClientType dtoTypeToEntityType(final Client.TypeEnum typeEnum) {
-        if (typeEnum == null) {
-            return null;
-        }
-        switch (typeEnum) {
-            case PERSONAL:
-                return ClientEntity.ClientType.PERSONAL;
-            case EMPRESARIAL:
-                return ClientEntity.ClientType.EMPRESARIAL;
-            default:
-                throw new IllegalArgumentException("Unexpected type: " + typeEnum);
-        }
+    private static TipoClienteEntity dtoTypeToEntityType(TipoCliente typeDto) {
+        if (typeDto == null) return null;
+        return TipoClienteEntity.builder()
+                .id(typeDto.getId())
+                .nombre(typeDto.getNombre())
+                .perfil(dtoPerfilToEntityPerfil(typeDto.getPerfil()))
+                .build();
     }
 
-    /**
-     * Método para ClientMapper.
-     * @param entity parametro de ClientEntity.
-     * @return Client.
-     */
-    public static Client entityToDto(final ClientEntity entity) {
+    private static perfilEntity dtoPerfilToEntityPerfil(Perfil perfilDto) {
+        if (perfilDto == null) return null;
+        return perfilEntity.builder()
+                .id(perfilDto.getId())
+                .nombre(perfilDto.getNombre())
+                .build();
+    }
+
+
+    public static Client entityToDto(ClientEntity entity) {
         return new Client()
                 .id(entity.getId())
                 .name(entity.getName())
-                .dni(entity.getDni())
-                .type(entityTypeToDtoType(entity.getType()));
+                .documento(entity.getDocument())
+                .tipoCliente(entityTypeToDtoType(entity.getType()));
     }
 
-    /**
-     * Método para ClientMapper.
-     * @param clientType parametro de ClientEntity.ClientType.
-     * @return Client.TypeEnum.
-     */
-    private static Client.TypeEnum entityTypeToDtoType(final ClientEntity.ClientType clientType) {
-        if (clientType == null) {
-            return null;
-        }
-        switch (clientType) {
-            case PERSONAL:
-                return Client.TypeEnum.PERSONAL;
-            case EMPRESARIAL:
-                return Client.TypeEnum.EMPRESARIAL;
-            default:
-                throw new IllegalArgumentException("Unexpected type: " + clientType);
-        }
+    public static TipoCliente entityTypeToDtoType(TipoClienteEntity entityType) {
+        if (entityType == null) return null;
+        return new TipoCliente()
+                .id(entityType.getId())
+                .nombre(entityType.getNombre())
+                .perfil(entityPerfilToDtoPerfil(entityType.getPerfil()));
+    }
+
+    private static Perfil entityPerfilToDtoPerfil(perfilEntity perfilEntity) {
+        if (perfilEntity == null) return null;
+        return new Perfil()
+                .id(perfilEntity.getId())
+                .nombre(perfilEntity.getNombre());
     }
 }
-
 
