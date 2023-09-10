@@ -1,10 +1,15 @@
 package com.example.demo.repository;
-
-import com.example.demo.entitys.TipoClienteEntity;
+import com.example.demo.Document.TipoClienteEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-
+/**
+ * Interfaz que define un ReactiveMongoRepository para TipoClienteRepository.
+ * */
 public interface TipoClienteRepository extends MongoRepository<TipoClienteEntity, String> {
+    /**
+     * AccountMongoRepository.
+     * @param nombre búsqueda por nombre.
+     * @return TipoClienteEntity.
+     */
     TipoClienteEntity findByNombre(String nombre);
 }

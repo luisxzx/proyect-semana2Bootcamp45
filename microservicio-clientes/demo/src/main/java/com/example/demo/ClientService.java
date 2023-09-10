@@ -1,8 +1,7 @@
     package com.example.demo;
-
-    import com.example.demo.entitys.ClientEntity;
-    import com.example.demo.entitys.TipoClienteEntity;
-    import com.example.demo.entitys.perfilEntity;
+    import com.example.demo.Document.ClientEntity;
+    import com.example.demo.Document.TipoClienteEntity;
+    import com.example.demo.Document.PerfilEntity;
     import com.example.demo.mapper.ClientMapper;
     import com.example.demo.model.Client;
     import com.example.demo.repository.ClientRepository;
@@ -12,21 +11,35 @@
     import org.springframework.stereotype.Service;
     import org.bson.types.ObjectId;
     import java.util.List;
-    import java.util.Optional;
     import java.util.function.Predicate;
     import java.util.stream.Collectors;
 
     @Service
     public class ClientService {
-
+        /**
+         * Para ClientRepository de la BD.
+         */
         @Autowired
         private ClientRepository clientRepository;
+
+        /**
+         * Para TipoClienteRepository de la BD.
+         */
         @Autowired
         private TipoClienteRepository tipoClienteRepository;
+
+        /**
+         * Para PerfilRepository de la BD.
+         */
         @Autowired
         private PerfilRepository perfilRepository;
 
-        public Client createClient(Client clientDto) {
+        /**
+         * Método para guardar una transacción.
+         * @param clientDto parametro de Client.
+         * @return Client.
+         */
+        public Client createClient(final Client clientDto) {
             TipoClienteEntity tipoClienteEntity = tipoClienteRepository.findByNombre(clientDto.getTipoCliente().getNombre());
             if (tipoClienteEntity == null) {
                 tipoClienteEntity = createOrGetTipoClienteEntity(clientDto.getTipoCliente().getNombre());
@@ -38,7 +51,12 @@
             return ClientMapper.entityToDto(savedEntity);
         }
 
-        private TipoClienteEntity createOrGetTipoClienteEntity(String nombreTipoCliente) {
+        /**
+         * Método para guardar una transacción.
+         * @param nombreTipoCliente variable String.
+         * @return TipoClienteEntity.
+         */
+        private TipoClienteEntity createOrGetTipoClienteEntity(final String nombreTipoCliente) {
             Predicate<String> isPersonal = "personal"::equalsIgnoreCase;
             Predicate<String> isEmpresarial = "empresarial"::equalsIgnoreCase;
 
@@ -47,7 +65,7 @@
             }
             String nombrePerfil = isEmpresarial.test(nombreTipoCliente) ? "pyme" : "vip";
 
-            perfilEntity existingPerfilEntity = perfilRepository.findByNombre(nombrePerfil);
+            PerfilEntity existingPerfilEntity = perfilRepository.findByNombre(nombrePerfil);
             if (existingPerfilEntity == null) {
                 existingPerfilEntity = createPerfilEntity(nombrePerfil);
             }
@@ -60,17 +78,31 @@
             return tipoClienteRepository.save(tipoClienteEntity);
         }
 
-        private perfilEntity createPerfilEntity(String nombrePerfil) {
-            perfilEntity newPerfilEntity = perfilEntity.builder().nombre(nombrePerfil).build();
+        /**
+         * Método para guardar una transacción.
+         * @param nombrePerfil variable String.
+         * @return PerfilEntity.
+         */
+        private PerfilEntity createPerfilEntity(final String nombrePerfil) {
+            PerfilEntity newPerfilEntity = PerfilEntity.builder().nombre(nombrePerfil).build();
             return perfilRepository.save(newPerfilEntity);
         }
 
+        /**
+         * Método para guardar una transacción.
+         * @return List<Client>.
+         */
         public List<Client> getAllClients() {
             List<ClientEntity> entities = clientRepository.findAll();
             return entities.stream().map(ClientMapper::entityToDto).collect(Collectors.toList());
         }
 
-        public Client getClientById(String id) {
+        /**
+         * Método para guardar una transacción.
+         * @param id variable strimg.
+         * @return Client.
+         */
+        public Client getClientById(final String id) {
             if (!ObjectId.isValid(id)) {
                 return null;
             }
@@ -80,10 +112,14 @@
                     .orElse(null);
         }
 
-        public List<Client> bulkRetrieveClients(List<String> ids) {
+        /**
+         * Método para guardar una transacción.
+         * @param ids lista de string.
+         * @return Client lista de clinentes.
+         */
+        public List<Client> bulkRetrieveClients(final List<String> ids) {
             List<ObjectId> objectIds = ids.stream().map(ObjectId::new).collect(Collectors.toList());
             List<ClientEntity> entities = clientRepository.findAllByGivenIds(objectIds);
             return entities.stream().map(ClientMapper::entityToDto).collect(Collectors.toList());
         }
-
     }

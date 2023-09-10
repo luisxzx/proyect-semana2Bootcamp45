@@ -1,10 +1,15 @@
 package com.example.demo.repository;
-
-import com.example.demo.entitys.perfilEntity;
+import com.example.demo.Document.PerfilEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-
-public interface PerfilRepository extends MongoRepository<perfilEntity, String> {
-    perfilEntity findByNombre(String nombre);
+/**
+ * Interfaz que define un ReactiveMongoRepository para PerfilRepository.
+ * */
+public interface PerfilRepository extends MongoRepository<PerfilEntity, String> {
+    /**
+     * AccountMongoRepository.
+     * @param nombre búsqueda por nombre.
+     * @return PerfilEntity.
+     */
+    PerfilEntity findByNombre(String nombre);
 }
